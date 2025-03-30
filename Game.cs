@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ludo
 {
@@ -39,75 +35,40 @@ namespace Ludo
 
             // Inicializa o mapa
             Map = new Square[15, 15];
-            //out:
-            //[0,0] --> [5,5]
-            //[0,9] --> [5,14]
-            //[9,0] --> [14,5]
-            //[9,9] --> [14,14]
+
+            bool isOutOfMap;
             for (int i = 0; i < 15; i++)
             {
                 for(int j = 0; j < 15; j++)
                 {
+                    //out:
+                    // [0,0] --> [5,5]
+                    // [0,9] --> [5,14]
+                    // [9,0] --> [14,5]
+                    // [9,9] --> [14,14]
+                    // square [6,6], [6,8], [8,6], [8,8]
+                    isOutOfMap = (i > 0 && i <= 5) && (j > 0 && j <= 5);
+                    isOutOfMap = isOutOfMap || (i > 0 && i <= 5) && (j > 9 && j <= 14);
+                    isOutOfMap = isOutOfMap || (i > 9 && i <= 14) && (j > 0 && j <= 5);
+                    isOutOfMap = isOutOfMap || (i > 9 && i <= 14) && (i > 9 && i <= 14);
+                    isOutOfMap = isOutOfMap || (i == 6 && j == 6) || (i == 6 && j == 8) || (i == 8 && j == 6) || (i == 8 && j == 8);
 
+                    if (isOutOfMap)
+                    {
+                        Map[i, j] = new Square(0);
+                    }
                 }
             }
         }
     }
 
-    class Square
-    {
-        /*
-        0 - Out of map
-        1 - Normal squares
-        2 - Final squares
-        */
-        private int type;
-        private int number;
-    }
 
-    class Player
-    {
-        // Atributos
-        private int Id;
-        private string Color;
-        private Pawn[] Pawns;
-
-        // Getters and Setters
-        public int _Id { get { return Id; } set { Id = value; } }
-        public string _Color { get { return Color; } set { Color = value; } }
-
-        // Construtor
-        public Player(int id, string color)
-        {
-            Id = id;
-            Color = color;
-
-            Pawns = new Pawn[4];
-            for(int i = 0; i < 4; i++)
-            {
-                Pawns[i] = new Pawn(i, color);
-            }
-        }
-    }
-
-    class Pawn
-    {
-        // Atributos
-        private int Id;
-        private Square PawnPosition;
-        private string Color;
-        private bool IsInGame;
-
-        // Getters and Setters
-        public int _Id { get { return Id; } set { Id = value; } }
-        public string _Color { get { return Color; } set { Color = value; } }
-
-        // Construtor 
-        public Pawn(int id, string color)
-        {
-            Id = id;
-            Color = color;
-            IsInGame = false;
-        }
-    }
 }
+
+
+/*
+ Ideia:
+Quando o peao for mexer ele vai reconhecer o tipo dos 4 quadrados ao redor dele, assim ele saberá para onde se mover
+O movimento do peao se da de uma em uma casa e ele realiza esse reconhecimento a cada casa (mas o reconhecimento pode ser feito de maneira
+O peao se move para onde ele reconheceu que deve se mover de casa em casa e quando 
+*/
